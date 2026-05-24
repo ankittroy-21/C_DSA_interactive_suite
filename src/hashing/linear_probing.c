@@ -1,4 +1,4 @@
-#include "data_structures.h"
+#include "data_structures.h" // Includes swap_adjacent_pairs(), max_array(), min_array(), print_array(), reverse_array(), array_demo()
 #include "hash.h"
 #include <safe_input.h>
 #include <stdbool.h>

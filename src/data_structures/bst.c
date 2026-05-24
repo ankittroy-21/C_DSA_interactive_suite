@@ -1,4 +1,4 @@
-#include "data_structures.h"
+#include "data_structures.h" // Includes bstNode structure, binary_search_tree_Demo(), bst_insert(), bst_inorder(), bst_preorder(), bst_postorder(), countNodes(), tree_height(), destroy_bst()
 #include "safe_input.h"
 #include <stdio.h>
 #include <stdlib.h>

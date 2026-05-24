@@ -1,4 +1,4 @@
-#include "data_structures.h"
+#include "data_structures.h" // Includes circular_queue structure, init_circ_queue(), destroy_circ_queue(), enqueue(), dequeue(), display_circ_queue(), circular_queue_Demo()
 #include "graph_traversals.h"
 #include "safe_input.h"
 #include <stdio.h>

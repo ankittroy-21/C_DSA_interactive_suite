@@ -1,4 +1,14 @@
 #include "data_structures.h"
+/*
+data_structures.h includes the following,
+
+Array related: swap_adjacent_pairs(), max_array(), min_array(), print_array(), reverse_array(), array_demo(),
+BST related:  bstNode structure, binary_search_tree_Demo(), bst_insert(), bst_inorder(), bst_preorder(), bst_postorder(), countNodes(), tree_height(), destroy_bst(),
+Circular Queue related: circular_queue structure, init_circ_queue(), destroy_circ_queue(), enqueue(), dequeue(), display_circ_queue(), circular_queue_Demo(),
+Double Linked List related:  doubly_ll_node structure, dll_insertAtBeginning(), dll_insertAtEnd(), dll_printlist(), dll_search(), dll_deleteAtBeginning(), dll_deleteAtEnd(), dll_deleteByValue(), delete_dll(), dll_demo(), dll_reverselist(),
+Single Linked List related:  Node structure, sll_printlist(), sll_insertAtEnd(), sll_deleteAtBeginning(), sll_deleteAtEnd(), sll_deleteByValue(), sll_insertAtBeginning(), sll_Demo(), sll_search(), sll_reverseList(), delete_sll()
+TBT related: TBTnode structure, leftmost(), create_node_tbt(), insert_node_tbt(), destroy_tbt(), TBT_demo()
+*/
 #include "safe_input.h"
 #include <stdio.h>
 

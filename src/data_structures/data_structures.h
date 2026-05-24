@@ -1,8 +1,8 @@
 #ifndef DATA_STRUCTURES_H
 #define DATA_STRUCTURES_H
 #define INPUT_EXIT_SIGNAL -111
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 // For arrays
 void swap_adjacent_pairs(int arr[], int length_of_array);
@@ -12,7 +12,7 @@ void print_array(const int arr[], int length_of_array);
 void reverse_array(int arr[], int length_of_array);
 void array_demo(void);
 
-//For Binary Search Tree
+// For Binary Search Tree
 typedef struct bstNode
 {
     int data;
@@ -28,7 +28,7 @@ int countnodes(const bstNode* head);
 int tree_height(const bstNode* root);
 void destroy_bst(bstNode* head);
 
-//For circular queue
+// For circular queue
 typedef struct circular_queue
 {
     int rear;
@@ -43,7 +43,7 @@ int dequeue(circular_queue* queue_ptr);
 void display_circ_queue(circular_queue* queue_ptr);
 void circular_queue_Demo(void);
 
-//For double linked list
+// For double linked list
 typedef struct doubly_ll_Node
 {
     int data;
@@ -61,7 +61,7 @@ void delete_dll(doubly_ll_Node* head);
 void dll_demo(void);
 int dll_reverselist(doubly_ll_Node** head_ref);
 
-//For single linked list
+// For single linked list
 typedef struct Node
 {
     int data;
@@ -78,7 +78,7 @@ int sll_search(const Node* head, int key);
 int sll_reverseList(Node** head_ref);
 void delete_sll(Node* head);
 
-//For Threadded Binary Tree
+// For Threadded Binary Tree
 typedef struct TBTnode
 {
     int data;

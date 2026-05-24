@@ -1,7 +1,7 @@
-#include "data_structures.h"
+#include "data_structures.h" // Includes Node structure, sll_printlist(), sll_insertAtEnd(), sll_deleteAtBeginning(), sll_deleteAtEnd(), sll_deleteByValue(), sll_insertAtBeginning(), sll_Demo(), sll_search(), sll_reverseList(), delete_sll()
+#include "safe_input.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "safe_input.h"
 
 // methods implemented are - insertAtEnd, deleteAtBeginning, insertAtBeginning, deleteAtEnd,
 // printlist, search

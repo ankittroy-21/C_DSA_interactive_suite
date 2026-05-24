@@ -1,7 +1,7 @@
-#include "data_structures.h"
+#include "data_structures.h" // Includes TBTnode structure, leftmost(), create_node_tbt(), insert_node_tbt(), destroy_tbt(), TBT_demo()
+#include "safe_input.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "safe_input.h"
 
 TBTnode* leftmost(TBTnode* node)
 {

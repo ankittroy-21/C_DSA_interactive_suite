@@ -1,5 +1,5 @@
 #include "stack.h"
-#include "data_structures.h"
+#include "data_structures.h" // Includes Node structure, sll_printlist(), sll_insertAtEnd(), sll_deleteAtBeginning(), sll_deleteAtEnd(), sll_deleteByValue(), sll_insertAtBeginning(), sll_Demo(), sll_search(), sll_reverseList(), delete_sll()
 #include <stdlib.h>
 
 struct stack
