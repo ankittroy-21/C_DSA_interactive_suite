@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<limits.h>
+#include <limits.h>
+#include "safe_input.h"
 
 int minDistance(int visited[] , int dist[], int size)
 {
@@ -124,7 +125,6 @@ void add_edge_directed(weightedGraph* graph, int src, int dest, int wt)
     if(src < 0 || src >= graph->V || dest < 0 || dest >= graph->V || wt < 0)
     {
         printf("Invalid edge: %d -> %d\n", src, dest);
-        exit(0);
     }
 
     edge_insertAtEnd(&graph->array[src],dest,wt);
@@ -150,28 +150,143 @@ void free_weightedGraph(weightedGraph* graph)
     free(graph);
 }
 
-int main()
+void dijkstra_demo(void)
 {
-    int V;
-    printf("Enter no.of vertices: ");
-    scanf("%d",&V);
+    int edges;
+    int graph_capacity;
+    int starting_node;
+    weightedGraph* graph = NULL;
 
-    weightedGraph* graph = create_weightedGraph(V);
-
-    int E;
-    printf("Enter no.of edges: ");
-    scanf("%d",&E);
-    int src, dest, wt;
-    for(int i = 0 ; i < E ; i++)
+    while (1)
     {
-        printf("Enter source, destination, weight pair: ");
-        scanf("%d %d %d",&src,&dest,&wt);
-        add_edge_directed(graph,src,dest,wt);
+        int graph_capacity_status = safe_input_int(&graph_capacity,
+                                                   "\nenter the number of vertices in the graph, "
+                                                   "(between 1 and 10), enter '-1' to exit : ",
+                                                   1, 10);
+
+        if (graph_capacity_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijkstra demo.....\n");
+            free_weightedGraph(graph);
+            return;
+        }
+
+        if (graph_capacity_status == 0)
+        {
+            continue;
+        }
+
+        graph = create_weightedGraph(graph_capacity);
+
+        if (!graph)
+        {
+            printf("\nmemory allocation failed\n");
+            free_weightedGraph(graph);
+            return;
+        }
+
+        break;
     }
 
-    int start;
-    printf("Enter the starting node: ");
-    scanf("%d",&start);
+    while (1)
+    {
+        int edges_capacity_status = safe_input_int(
+            &edges, "\nenter number of edges (between 1 and 100), enter '-1' to exit :", 0, 100);
 
-    dijkstra(graph,start);
-}   
+        if (edges_capacity_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijkstra demo\n");
+            free_weightedGraph(graph);
+            return;
+        }
+
+        if (edges_capacity_status == 0)
+        {
+            continue;
+        }
+
+        break;
+    }
+
+    printf("\nEnter source, destination, weight pairs (Source, Destination must be b/w 0 and %d (both inclusive)):\n",graph_capacity-1);
+
+    for (int i = 0; i < edges; i++)
+    {
+        int src_status;
+        int dest_status;
+        int wt_status;
+        int src;
+        int dest;
+        int wt;
+
+    retry:
+        src_status = safe_input_int(&src, "src: ", 0, graph_capacity - 1);
+
+        if (src_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijkstra demo\n");
+            free_weightedGraph(graph);
+            return;
+        }
+        if (src_status == 0)
+        {
+            goto retry;
+        }
+
+        dest_status = safe_input_int(&dest, "dest: ", 0, graph_capacity - 1);
+
+        if (dest_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijsktra demo\n");
+            free_weightedGraph(graph);
+            return;
+        }
+        if (dest_status == 0)
+        {
+            goto retry;
+        }
+
+        wt_status = safe_input_int(&wt, "weight: ", 0, INT_MAX);
+
+        if (wt_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijsktra demo\n");
+            free_weightedGraph(graph);
+            return;
+        }
+        if (wt_status == 0)
+        {
+            goto retry;
+        }
+
+        add_edge_directed(graph, src, dest, wt);
+    }
+
+    while (1)
+    {
+        int start_status =
+            safe_input_int(&starting_node, "\nenter starting node: ", 0, graph_capacity - 1);
+
+        if (start_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting Dijkstra demo.....\n");
+            free_weightedGraph(graph);
+            return;
+        }
+
+        if (start_status == 0)
+            continue;
+
+        if (starting_node < 0 || starting_node >= graph->V)
+        {
+            printf("Invalid start node\n");
+            free_weightedGraph(graph);
+            return;
+        }
+        break;
+    }
+
+    printf("\n");
+    dijkstra(graph,starting_node);
+    free_weightedGraph(graph);
+}

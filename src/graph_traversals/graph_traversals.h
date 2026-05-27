@@ -1,6 +1,6 @@
 #ifndef GRAPH_TRAVERSALS_H
 #define GRAPH_TRAVERSALS_H
-#include "../data_structures/data_structures.h"
+#include "data_structures.h"
 
 void bfs_demo(void);
 void dfs_demo(void);
@@ -16,6 +16,8 @@ void add_edge_undirected(Graph* graph, int src, int dest);
 void free_graph(Graph* graph);
 
 // ------------------For dijkstra's algorithm----------------------
+
+void dijkstra_demo(void);
 
 // A structure with can store the destination along with weights
 typedef struct Edge
