@@ -27,6 +27,31 @@ void test_printStack_nonempty(void)
     printf("test_printStack_nonempty passed.\n");
 }
 
+void test_printStackAsInts_empty(void)
+{
+    stack* s = createStack();
+    printStackAsInts(s);
+    assert(isEmpty(s) == 1);
+    destroyStack(s);
+    printf("test_printStackAsInts_empty passed.\n");
+}
+
+void test_printStackAsInts_nonempty(void)
+{
+    stack* s = createStack();
+    push(s, 5);
+    push(s, 11);
+    push(s, 99);
+    assert(peek(s) == 99);
+    assert(isEmpty(s) == 0);
+    assert(pop(s) == 99);
+    assert(pop(s) == 11);
+    assert(pop(s) == 5);
+    assert(isEmpty(s) == 1);
+    destroyStack(s);
+    printf("test_printStackAsInts_nonempty passed.\n");
+}
+
 void test_push_pop_lifo(void)
 {
     stack* s = createStack();
@@ -101,6 +126,8 @@ int main(void)
     test_destroy_nonEmpty();
     test_printStack_empty();
     test_printStack_nonempty();
+    test_printStackAsInts_empty();
+    test_printStackAsInts_nonempty();
     printf("All stack tests passed.\n");
     return 0;
 }
