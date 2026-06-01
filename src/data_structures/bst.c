@@ -247,7 +247,7 @@ void binary_search_tree_Demo(void)
                 destroy_bst(head);
                 break;
             }
-            if (bst_traversal_choice == 0)
+            if (bst_traversal_status == 0)
             {
                 continue;
             }
