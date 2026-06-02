@@ -39,8 +39,9 @@ void data_structures_demo(void)
                         "\nenter 2 for doubly linked list demo"
                         "\nenter 3 for arrays demo"
                         "\nenter 4 for priority queue (binary heap implementation with array) demo"
+                        "\nenter 5 for simple (linear) queue demo"
                         "\nenter choice : ",
-                        1, 4);
+                        1, 5);
 
                     if (linear_ds_status == INPUT_EXIT_SIGNAL)
                         break;
@@ -66,6 +67,11 @@ void data_structures_demo(void)
                     if (linear_ds_choice == 4)
                     {
                         priority_queue_demo();
+                        continue;
+                    }
+                    if (linear_ds_choice == 5)
+                    {
+                        simple_queue_Demo();
                         continue;
                     }
                 }

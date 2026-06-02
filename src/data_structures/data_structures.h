@@ -169,4 +169,24 @@ int scll_getLength(const scll* list);
 void scll_printlist(const scll* list);
 void scll_destroy(scll* list);
 void scll_Demo(void);
+
+// For simple (linear) queue
+// A fixed-capacity array queue WITHOUT wrap-around. front and rear are array indices (both -1
+// when empty) and rear only ever advances. Once rear reaches N-1 the queue reports full even
+// if dequeues freed slots at the front - that freed space is never reused. This "false
+// overflow" is the limitation the circular queue (above) solves by wrapping front/rear modulo
+// N; the two live side-by-side for comparison.
+typedef struct simple_queue
+{
+    int front;
+    int rear;
+    int N;
+    int* arr;
+} simple_queue;
+int init_simple_queue(int N, simple_queue* queue_ptr);
+void destroy_simple_queue(simple_queue* queue_ptr);
+int enqueue_simple(simple_queue* queue_ptr, int value);
+int dequeue_simple(simple_queue* queue_ptr);
+void display_simple_queue(const simple_queue* queue_ptr);
+void simple_queue_Demo(void);
 #endif

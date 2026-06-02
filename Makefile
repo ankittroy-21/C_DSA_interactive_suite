@@ -41,7 +41,7 @@ fmt:
 	find . \( -name "*.c" -o -name "*.h" \) -not -path "*/build/*" | xargs clang-format -i
 
 clean:
-	$(RM) $(TARGET)$(EXE) test_circ_queue$(EXE) test_bst$(EXE) test_search$(EXE) test_hash_func$(EXE) test_sll$(EXE) test_dll$(EXE) test_array$(EXE) test_stack$(EXE) test_tbt$(EXE) test_priority_queue$(EXE) test_scll$(EXE)
+	$(RM) $(TARGET)$(EXE) test_circ_queue$(EXE) test_bst$(EXE) test_search$(EXE) test_hash_func$(EXE) test_sll$(EXE) test_dll$(EXE) test_array$(EXE) test_stack$(EXE) test_tbt$(EXE) test_priority_queue$(EXE) test_scll$(EXE) test_simple_queue$(EXE)
 
 valgrind:
 	for t in $(TEST_BINS); do \
@@ -115,6 +115,11 @@ SCLL_TEST_SRC = \
 	src/utils/safe_input_int.c \
 	tests/test_scll.c
 
+SIMPLE_QUEUE_TEST_SRC = \
+	src/data_structures/simple_queue.c \
+	src/utils/safe_input_int.c \
+	tests/test_simple_queue.c
+
 test_tbt:
 	$(CC) $(CFLAGS) $(TBT_TEST_SRC) -o test_tbt$(EXE)
 	./test_tbt$(EXE)
@@ -159,8 +164,12 @@ test_scll:
 	$(CC) $(CFLAGS) $(SCLL_TEST_SRC) -o test_scll$(EXE)
 	./test_scll$(EXE)
 
+test_simple_queue:
+	$(CC) $(CFLAGS) $(SIMPLE_QUEUE_TEST_SRC) -o test_simple_queue$(EXE)
+	./test_simple_queue$(EXE)
 
-TEST_BINS=test_circ_queue test_bst test_search test_hash_func test_sll test_dll test_array test_stack test_tbt test_priority_queue test_scll
+
+TEST_BINS=test_circ_queue test_bst test_search test_hash_func test_sll test_dll test_array test_stack test_tbt test_priority_queue test_scll test_simple_queue
 test: $(TEST_BINS)
 
 .PHONY: $(TARGET) $(TEST_BINS)
