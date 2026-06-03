@@ -189,4 +189,27 @@ int enqueue_simple(simple_queue* queue_ptr, int value);
 int dequeue_simple(simple_queue* queue_ptr);
 void display_simple_queue(const simple_queue* queue_ptr);
 void simple_queue_Demo(void);
+
+// For Double-Ended Queue (Deque)
+typedef struct deque
+{
+    int front;
+    int rear;
+    int N;
+    int* arr;
+} deque;
+int init_deque(int N, deque* dq);
+void destroy_deque(deque* dq);
+int deque_insert_front(deque* dq, int value);
+int deque_insert_rear(deque* dq, int value);
+int deque_delete_front(deque* dq);
+int deque_delete_rear(deque* dq);
+int deque_get_front(const deque* dq);
+int deque_get_rear(const deque* dq);
+bool deque_is_empty(const deque* dq);
+bool deque_is_full(const deque* dq);
+void display_deque(const deque* dq);
+void deque_demo(void);
+
 #endif
+

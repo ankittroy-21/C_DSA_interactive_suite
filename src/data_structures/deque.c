@@ -1,0 +1,305 @@
+#include "data_structures.h"
+#include "safe_input.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+int init_deque(int N, deque* dq)
+{
+    if (N < 1)
+        return 0;
+    dq->arr = malloc(sizeof(int) * N);
+    if (dq->arr == NULL)
+        return 0;
+    dq->N = N;
+    dq->front = -1;
+    dq->rear = -1;
+    return 1;
+}
+
+void destroy_deque(deque* dq)
+{
+    if (dq->arr == NULL)
+        return;
+    free(dq->arr);
+    dq->arr = NULL;
+    dq->front = -1;
+    dq->rear = -1;
+    dq->N = 0;
+}
+
+bool deque_is_empty(const deque* dq)
+{
+    return (dq->front == -1);
+}
+
+bool deque_is_full(const deque* dq)
+{
+    return ((dq->front == 0 && dq->rear == dq->N - 1) || (dq->front == dq->rear + 1));
+}
+
+int deque_insert_front(deque* dq, int value)
+{
+    if (deque_is_full(dq))
+        return -1;
+
+    if (dq->front == -1) // empty
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else if (dq->front == 0)
+    {
+        dq->front = dq->N - 1;
+    }
+    else
+    {
+        dq->front = dq->front - 1;
+    }
+
+    dq->arr[dq->front] = value;
+    return 1;
+}
+
+int deque_insert_rear(deque* dq, int value)
+{
+    if (deque_is_full(dq))
+        return -1;
+
+    if (dq->front == -1) // empty
+    {
+        dq->front = 0;
+        dq->rear = 0;
+    }
+    else if (dq->rear == dq->N - 1)
+    {
+        dq->rear = 0;
+    }
+    else
+    {
+        dq->rear = dq->rear + 1;
+    }
+
+    dq->arr[dq->rear] = value;
+    return 1;
+}
+
+int deque_delete_front(deque* dq)
+{
+    if (deque_is_empty(dq))
+        return -1;
+
+    int val = dq->arr[dq->front];
+
+    if (dq->front == dq->rear) // only one element
+    {
+        dq->front = -1;
+        dq->rear = -1;
+    }
+    else if (dq->front == dq->N - 1)
+    {
+        dq->front = 0;
+    }
+    else
+    {
+        dq->front = dq->front + 1;
+    }
+
+    return val;
+}
+
+int deque_delete_rear(deque* dq)
+{
+    if (deque_is_empty(dq))
+        return -1;
+
+    int val = dq->arr[dq->rear];
+
+    if (dq->front == dq->rear) // only one element
+    {
+        dq->front = -1;
+        dq->rear = -1;
+    }
+    else if (dq->rear == 0)
+    {
+        dq->rear = dq->N - 1;
+    }
+    else
+    {
+        dq->rear = dq->rear - 1;
+    }
+
+    return val;
+}
+
+int deque_get_front(const deque* dq)
+{
+    if (deque_is_empty(dq))
+        return -1;
+    return dq->arr[dq->front];
+}
+
+int deque_get_rear(const deque* dq)
+{
+    if (deque_is_empty(dq))
+        return -1;
+    return dq->arr[dq->rear];
+}
+
+void display_deque(const deque* dq)
+{
+    if (deque_is_empty(dq))
+    {
+        printf("\nDeque is empty\n");
+        return;
+    }
+    printf("\nDeque elements: ");
+    int i = dq->front;
+    while (1)
+    {
+        printf("%d", dq->arr[i]);
+        if (i == dq->rear)
+            break;
+        printf("<->");
+        i = (i + 1) % dq->N;
+    }
+    printf("\n");
+}
+
+void deque_demo(void)
+{
+    while (1)
+    {
+        deque dq;
+        int capacity;
+        int status = safe_input_int(&capacity,
+                                    "\n\nenter capacity number (N) of deque (between 1 and 100), "
+                                    "enter '-1' to exit:- ",
+                                    1, 100);
+
+        if (status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting deque demo\n");
+            return;
+        }
+        if (status == 0)
+        {
+            continue;
+        }
+        if (!init_deque(capacity, &dq))
+        {
+            printf("\nmalloc allocation failure");
+            return;
+        }
+
+        while (1)
+        {
+            int choice;
+            int choice_status = safe_input_int(&choice,
+                                               "\n1. Insert Front"
+                                               "\n2. Insert Rear"
+                                               "\n3. Delete Front"
+                                               "\n4. Delete Rear"
+                                               "\n5. Get Front"
+                                               "\n6. Get Rear"
+                                               "\nenter choice, '-1' to exit this deque:- ",
+                                               1, 6);
+
+            if (choice_status == INPUT_EXIT_SIGNAL)
+            {
+                destroy_deque(&dq);
+                break;
+            }
+            if (choice_status == 0)
+            {
+                continue;
+            }
+
+            if (choice == 1)
+            {
+                int val;
+                int val_status = safe_input_int(&val, "\nEnter value to insert at front (1 to 100), '-1' to exit: ", 1, 100);
+                if (val_status == INPUT_EXIT_SIGNAL)
+                {
+                    destroy_deque(&dq);
+                    return;
+                }
+                if (val_status == 0)
+                    continue;
+
+                if (deque_insert_front(&dq, val) == -1)
+                {
+                    printf("\nDeque is full (overflow)\n");
+                }
+                display_deque(&dq);
+            }
+            else if (choice == 2)
+            {
+                int val;
+                int val_status = safe_input_int(&val, "\nEnter value to insert at rear (1 to 100), '-1' to exit: ", 1, 100);
+                if (val_status == INPUT_EXIT_SIGNAL)
+                {
+                    destroy_deque(&dq);
+                    return;
+                }
+                if (val_status == 0)
+                    continue;
+
+                if (deque_insert_rear(&dq, val) == -1)
+                {
+                    printf("\nDeque is full (overflow)\n");
+                }
+                display_deque(&dq);
+            }
+            else if (choice == 3)
+            {
+                int removed = deque_delete_front(&dq);
+                if (removed == -1)
+                {
+                    printf("\nDeque is empty (underflow)\n");
+                }
+                else
+                {
+                    printf("\nDeleted element from front: %d\n", removed);
+                }
+                display_deque(&dq);
+            }
+            else if (choice == 4)
+            {
+                int removed = deque_delete_rear(&dq);
+                if (removed == -1)
+                {
+                    printf("\nDeque is empty (underflow)\n");
+                }
+                else
+                {
+                    printf("\nDeleted element from rear: %d\n", removed);
+                }
+                display_deque(&dq);
+            }
+            else if (choice == 5)
+            {
+                int val = deque_get_front(&dq);
+                if (val == -1)
+                {
+                    printf("\nDeque is empty\n");
+                }
+                else
+                {
+                    printf("\nFront element: %d\n", val);
+                }
+            }
+            else if (choice == 6)
+            {
+                int val = deque_get_rear(&dq);
+                if (val == -1)
+                {
+                    printf("\nDeque is empty\n");
+                }
+                else
+                {
+                    printf("\nRear element: %d\n", val);
+                }
+            }
+        }
+    }
+}
