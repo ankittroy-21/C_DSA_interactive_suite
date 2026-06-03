@@ -14,7 +14,7 @@ void circular_queue_Demo(void)
 
     while (1)
     {
-        circular_queue rollnos;
+        circular_queue rollnos = {0};
         int queue_capacity_value;
         int queue_capacity_status =
             safe_input_int(&queue_capacity_value,
