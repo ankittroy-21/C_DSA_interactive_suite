@@ -95,6 +95,35 @@ void bst_postorder(const bstNode* head)
     printf("%d,", head->data);
 }
 
+void printLevel(bstNode* head, int level)
+{
+    if (!head)
+        return;
+
+    if (level == 1)
+        printf("%d ", head->data);
+    else
+    {
+        printLevel(head->left, level - 1);
+        printLevel(head->right, level - 1);
+    }
+}
+
+void bst_level_order(struct bstNode* head)
+{
+    if(!head)
+        return;
+
+    int h = tree_height(head);
+
+    for (int i = 1; i <= h; i++)
+    {
+        printf("Level %d: ",i);
+        printLevel(head, i);
+        printf("\n");
+    }
+}
+
 int countnodes(const bstNode* head)
 {
     if (head == NULL)
@@ -240,8 +269,8 @@ void binary_search_tree_Demo(void)
             bst_traversal_status =
                 safe_input_int(&bst_traversal_choice,
                                "\nenter '1' for inorder, '2' for preorder and "
-                               "'3' for postorder, '4' to delete a node and '-1' to exit:- ",
-                               1, 4);
+                               "'3' for postorder, '4' for level order, '5' to delete a node  and '-1' to exit: ",
+                               1, 5);
 
             if (bst_traversal_status == INPUT_EXIT_SIGNAL)
             {
@@ -264,7 +293,11 @@ void binary_search_tree_Demo(void)
             {
                 bst_postorder(head);
             }
-            else if (bst_traversal_choice == 4)
+            else if(bst_traversal_choice == 4)
+            {
+                bst_level_order(head);
+            }
+            else if (bst_traversal_choice == 5)
             {
                 int delete_value;
                 int delete_status;
