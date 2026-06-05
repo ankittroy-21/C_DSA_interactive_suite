@@ -1,5 +1,7 @@
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
+#include <time.h>
 
 static void swap(int* a, int* b)
 {
@@ -89,7 +91,10 @@ void quicksort_demo(void)
             i--;
         } while (i >= 0);
 
+        clock_t start_t = clock();
         quicksort(arr, 0, length_of_array - 1);
+        clock_t end_t = clock();
+        double total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
         printf("\nThe array sorted by quicksort is:- ");
         for (int i = 0; i < length_of_array; i++)
@@ -98,5 +103,7 @@ void quicksort_demo(void)
             if (i < length_of_array - 1)
                 printf(",");
         }
+        printf("\nTotal CPU time taken:- %f seconds", total_t);
+        add_to_history("Quick Sort", length_of_array, total_t);
     }
 }

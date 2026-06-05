@@ -1,4 +1,5 @@
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
 #include <time.h>
 
@@ -93,6 +94,7 @@ void linear_search_demo(void)
         printf("\ntotal CPU time taken for linear search:- %f seconds", total_t);
         printf("\n(most probably execution time would be lesser than clock resolution, resulting "
                "in 0.00)");
+        add_to_history("Linear Search", length_of_array, total_t);
     }
 }
 

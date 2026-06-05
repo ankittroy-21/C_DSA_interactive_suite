@@ -7,6 +7,7 @@
 #include "searching_algorithms.h"
 #include "sorting_algorithms_n2.h"
 #include "stack.h"
+#include "history_logger.h"
 #include <stdio.h>
 
 void data_structures_demo(void);
@@ -29,10 +30,11 @@ int main()
             "click 3 for sorting algorithms (the n^2 family) demo\n"
             "click 4 for advanced sorting algorithms demo\n"
             "click 5 for searching algorithms demo\n"
-            "click 6 for graph traversals (bfs/dfs/dijkstra/astar/floyd warshall) demo\n"
+            "click 6 for graph traversals (bfs/dfs/dijkstra/astar/floyd warshall/kruskal) demo\n"
             "click 7 for hashing algorithms demo\n"
+            "click 8 for exporting performance history to CSV\n"
             "enter choice : ",
-            1, 7 // limits
+            1, 8 // limits
         );
 
         if (status == -111)
@@ -67,6 +69,9 @@ int main()
                 break;
             case 7:
                 hashing_algorithms_demo();
+                break;
+            case 8:
+                export_history_to_csv();
                 break;
         }
     }

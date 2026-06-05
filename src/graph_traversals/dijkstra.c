@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int insert_pq_dijkstra(PQ_dijkstra* pq, int vertex, int distance)
+int insert_pq_graph(PQ_graph* pq, int vertex, int distance)
 {
     if (pq == NULL || pq->size == HEAP_CAPACITY)
         return 0;
@@ -20,7 +20,7 @@ int insert_pq_dijkstra(PQ_dijkstra* pq, int vertex, int distance)
         if (pq->heap[i].distance >= pq->heap[parent].distance)
             break;
 
-        PQ_dijkstra_node temp = pq->heap[i];
+        PQ_graph_node temp = pq->heap[i];
         pq->heap[i] = pq->heap[parent];
         pq->heap[parent] = temp;
 
@@ -30,13 +30,13 @@ int insert_pq_dijkstra(PQ_dijkstra* pq, int vertex, int distance)
     return 1;
 }
 
-bool extractTop_pq_dijkstra(PQ_dijkstra* pq, PQ_dijkstra_node* result)
+bool extractTop_pq_graph(PQ_graph* pq, PQ_graph_node* result)
 {
     if (pq == NULL || result == NULL || pq->size == 0)
         return false;
 
     int topIndex = 0;
-    PQ_dijkstra_node topElement = pq->heap[topIndex];
+    PQ_graph_node topElement = pq->heap[topIndex];
     int lastElementIndex = pq->size - 1;
 
     pq->heap[topIndex] = pq->heap[lastElementIndex];
@@ -58,7 +58,7 @@ bool extractTop_pq_dijkstra(PQ_dijkstra* pq, PQ_dijkstra_node* result)
         if (target == i)
             break;
 
-        PQ_dijkstra_node temp = pq->heap[i];
+        PQ_graph_node temp = pq->heap[i];
         pq->heap[i] = pq->heap[target];
         pq->heap[target] = temp;
 
@@ -80,13 +80,13 @@ void dijkstra(weightedGraph* graph, int start)
 
     dist[start] = 0;
 
-    PQ_dijkstra pq;
+    PQ_graph pq;
     pq.size = 0;
-    insert_pq_dijkstra(&pq, start, 0);
+    insert_pq_graph(&pq, start, 0);
 
-    PQ_dijkstra_node currentNode;
+    PQ_graph_node currentNode;
 
-    while (extractTop_pq_dijkstra(&pq, &currentNode))
+    while (extractTop_pq_graph(&pq, &currentNode))
     {
         int u = currentNode.vertex;
 
@@ -102,7 +102,7 @@ void dijkstra(weightedGraph* graph, int start)
             if (dist[u] != INT_MAX && dist[u] + currentWeight < dist[v])
             {
                 dist[v] = dist[u] + currentWeight;
-                insert_pq_dijkstra(&pq, v, dist[v]);
+                insert_pq_graph(&pq, v, dist[v]);
             }
 
             current = current->next;

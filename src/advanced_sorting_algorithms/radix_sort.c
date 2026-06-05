@@ -1,7 +1,9 @@
 #include "advanced_sorting.h"
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 static int get_max(int arr[], int n)
 {
@@ -103,7 +105,10 @@ void radix_sort_demo(void)
             }
         }
 
+        clock_t start_t = clock();
         radix_sort(arr, length_of_array);
+        clock_t end_t = clock();
+        double total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
         printf("\nThe array sorted by radix sort is:- ");
         for (int i = 0; i < length_of_array; i++)
@@ -112,5 +117,7 @@ void radix_sort_demo(void)
             if (i < length_of_array - 1)
                 printf(",");
         }
+        printf("\nTotal CPU time taken:- %f seconds", total_t);
+        add_to_history("Radix Sort", length_of_array, total_t);
     }
 }

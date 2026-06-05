@@ -1,6 +1,9 @@
 #include "data_structures.h"
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
+#include <time.h>
+#include <unistd.h>
 
 void selection_sort(int arr[], int length_of_array);
 
@@ -49,6 +52,10 @@ void selection_sort_demo(void)
 
 void selection_sort(int arr[], int length_of_array)
 {
+    clock_t start_t, end_t;
+    double total_t;
+
+    start_t = clock();
 
     for (int i = 0; i < length_of_array - 1; i++)
     {
@@ -69,11 +76,17 @@ void selection_sort(int arr[], int length_of_array)
             arr[i] = temp;
         }
 
-        // printf("after iteration no %d - ",i+1);
-        // print_array(arr,length_of_array);
-        // printf("\n");
+        printf("after iteration no %d - ",i+1);
+        print_array(arr,length_of_array);
+        printf("\n");
+        sleep(1);
     }
+
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
     printf("\nfinal array sorted by selection sort is:- ");
     print_array(arr, length_of_array);
+    printf("\nTotal CPU time taken:- %f seconds", total_t);
+    add_to_history("Selection Sort", length_of_array, total_t);
 }

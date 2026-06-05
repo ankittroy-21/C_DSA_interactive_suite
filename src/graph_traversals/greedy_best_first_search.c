@@ -4,61 +4,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int astar_solve(weightedGraph* graph, int start, int dest, int h[], int parent[])
+int greedy_best_first_search_solve(weightedGraph* graph, int start, int dest, int h[], int parent[],
+                                   int traversal_order[], int* traversal_len)
 {
     int size = graph->V;
     int* visited = calloc(size, sizeof(int));
-    int* dist = malloc(size * sizeof(int));
-    int* fScore = malloc(size * sizeof(int));
-
-    if (!visited || !dist || !fScore)
+    if (!visited)
     {
-        free(visited);
-        free(dist);
-        free(fScore);
-        return -1;
-    }
-
-    for (int i = 0; i < size; i++)
-    {
-        dist[i] = INT_MAX;
-        fScore[i] = INT_MAX;
-        if (parent)
-        {
-            parent[i] = -1;
-        }
+        return 0;
     }
 
     // Reuse the shared graph priority queue: a min-heap keyed on the node's
-    // "distance" field, which here carries the f-score (f = g + h). Duplicate
-    // entries are handled lazily via the visited[] check on pop.
+    // "distance" field, which here carries the heuristic h. Duplicate entries
+    // are handled lazily via the visited[] check on pop.
     PQ_graph pq;
     pq.size = 0;
 
-    dist[start] = 0;
-    fScore[start] = h[start];
-    insert_pq_graph(&pq, start, fScore[start]);
+    for (int i = 0; i < size; i++)
+    {
+        parent[i] = -1;
+    }
 
-    int result = INT_MAX;
+    insert_pq_graph(&pq, start, h[start]);
+
+    int found = 0;
+    *traversal_len = 0;
 
     PQ_graph_node popped;
     while (extractTop_pq_graph(&pq, &popped))
     {
         int u = popped.vertex;
-
         if (visited[u])
         {
             continue;
         }
 
-        // Display expansion details for learning/trace (popped.distance == f)
-        printf("[Expansion] Popped Node %d | g = %d, h = %d, f = %d\n", u, dist[u], h[u],
-               popped.distance);
+        traversal_order[(*traversal_len)++] = u;
 
-        // Goal timing: stop when popped
+        // Display expansion details for learning/trace
+        printf("[Expansion] Popped Node %d | h = %d\n", u, h[u]);
+
         if (u == dest)
         {
-            result = dist[u];
+            found = 1;
             break;
         }
 
@@ -68,52 +56,49 @@ int astar_solve(weightedGraph* graph, int start, int dest, int h[], int parent[]
         while (current != NULL)
         {
             int v = current->destination;
-            int currentWeight = current->weight;
-
-            if (!visited[v] && dist[u] != INT_MAX)
+            if (!visited[v] && parent[v] == -1 && v != start)
             {
-                int tentative_g = dist[u] + currentWeight;
-                if (tentative_g < dist[v])
-                {
-                    dist[v] = tentative_g;
-                    if (parent)
-                    {
-                        parent[v] = u;
-                    }
-
-                    int tentative_f = tentative_g + h[v];
-                    if (tentative_f < 0)
-                    {
-                        tentative_f = INT_MAX;
-                    }
-                    fScore[v] = tentative_f;
-
-                    insert_pq_graph(&pq, v, fScore[v]);
-                }
+                parent[v] = u;
+                insert_pq_graph(&pq, v, h[v]);
             }
             current = current->next;
         }
     }
 
     free(visited);
-    free(dist);
-    free(fScore);
-    return result;
+    return found;
 }
 
-void astar(weightedGraph* graph, int start, int dest, int h[])
+void greedy_best_first_search(weightedGraph* graph, int start, int dest, int h[])
 {
     int size = graph->V;
     int* parent = malloc(size * sizeof(int));
-    if (!parent)
+    int* traversal_order = malloc(size * sizeof(int));
+    int traversal_len = 0;
+
+    if (!parent || !traversal_order)
     {
-        printf("Memory allocation failed in A*\n");
+        printf("Memory allocation failed in Greedy Best-First Search\n");
+        free(parent);
+        free(traversal_order);
         return;
     }
 
-    int cost = astar_solve(graph, start, dest, h, parent);
+    int found = greedy_best_first_search_solve(graph, start, dest, h, parent, traversal_order,
+                                               &traversal_len);
 
-    if (cost == INT_MAX || cost < 0)
+    printf("Traversal Order: ");
+    for (int i = 0; i < traversal_len; i++)
+    {
+        printf("%d", traversal_order[i]);
+        if (i < traversal_len - 1)
+        {
+            printf(" -> ");
+        }
+    }
+    printf("\n");
+
+    if (!found)
     {
         printf("No path exists from %d to %d\n", start, dest);
     }
@@ -122,8 +107,9 @@ void astar(weightedGraph* graph, int start, int dest, int h[])
         int* path = malloc(size * sizeof(int));
         if (!path)
         {
-            printf("Memory allocation failed in A*\n");
+            printf("Memory allocation failed in Greedy Best-First Search\n");
             free(parent);
+            free(traversal_order);
             return;
         }
         int pathLen = 0;
@@ -134,7 +120,7 @@ void astar(weightedGraph* graph, int start, int dest, int h[])
             curr = parent[curr];
         }
 
-        printf("Shortest Path: ");
+        printf("Discovered Path: ");
         for (int i = pathLen - 1; i >= 0; i--)
         {
             printf("%d", path[i]);
@@ -143,13 +129,15 @@ void astar(weightedGraph* graph, int start, int dest, int h[])
                 printf(" -> ");
             }
         }
-        printf("\nTotal Cost: %d\n", cost);
+        printf("\n");
         free(path);
     }
+
     free(parent);
+    free(traversal_order);
 }
 
-void astar_demo(void)
+void greedy_best_first_search_demo(void)
 {
     int edges;
     int graph_capacity;
@@ -167,7 +155,7 @@ void astar_demo(void)
 
         if (graph_capacity_status == INPUT_EXIT_SIGNAL)
         {
-            printf("\nExiting A* demo.....\n");
+            printf("\nExiting Greedy Best-First Search demo.....\n");
             return;
         }
 
@@ -194,7 +182,7 @@ void astar_demo(void)
 
         if (edges_capacity_status == INPUT_EXIT_SIGNAL)
         {
-            printf("\nExiting A* demo\n");
+            printf("\nExiting Greedy Best-First Search demo\n");
             free_weightedGraph(graph);
             return;
         }
@@ -225,7 +213,7 @@ void astar_demo(void)
 
         if (src_status == INPUT_EXIT_SIGNAL)
         {
-            printf("\nExiting A* demo\n");
+            printf("\nExiting Greedy Best-First Search demo\n");
             free_weightedGraph(graph);
             return;
         }
@@ -238,7 +226,7 @@ void astar_demo(void)
 
         if (dest_status == INPUT_EXIT_SIGNAL)
         {
-            printf("\nExiting A* demo\n");
+            printf("\nExiting Greedy Best-First Search demo\n");
             free_weightedGraph(graph);
             return;
         }
@@ -251,7 +239,7 @@ void astar_demo(void)
 
         if (wt_status == INPUT_EXIT_SIGNAL)
         {
-            printf("\nExiting A* demo\n");
+            printf("\nExiting Greedy Best-First Search demo\n");
             free_weightedGraph(graph);
             return;
         }
@@ -286,7 +274,7 @@ void astar_demo(void)
                 h_status = safe_input_int(&h_val, prompt, 0, INT_MAX);
                 if (h_status == INPUT_EXIT_SIGNAL)
                 {
-                    printf("\nExiting A* demo\n");
+                    printf("\nExiting Greedy Best-First Search demo\n");
                     free(h);
                     free_weightedGraph(graph);
                     return;
@@ -306,7 +294,7 @@ void astar_demo(void)
 
             if (start_status == INPUT_EXIT_SIGNAL)
             {
-                printf("\nExiting A* demo.....\n");
+                printf("\nExiting Greedy Best-First Search demo.....\n");
                 free(h);
                 free_weightedGraph(graph);
                 return;
@@ -327,7 +315,7 @@ void astar_demo(void)
 
             if (dest_status == INPUT_EXIT_SIGNAL)
             {
-                printf("\nExiting A* demo.....\n");
+                printf("\nExiting Greedy Best-First Search demo.....\n");
                 free(h);
                 free_weightedGraph(graph);
                 return;
@@ -342,16 +330,16 @@ void astar_demo(void)
         }
 
         printf("\n");
-        astar(graph, starting_node, destination_node, h);
+        greedy_best_first_search(graph, starting_node, destination_node, h);
 
         int choice;
     retry_choice:
-        printf("\nOptions:\n1. Re-run A* with NEW heuristics\n2. Re-run A* with SAME heuristics "
-               "(new start/destination)\n0. Exit A* demo\n");
+        printf("\nOptions:\n1. Re-run Greedy BFS with NEW heuristics\n2. Re-run Greedy BFS with "
+               "SAME heuristics (new start/destination)\n0. Exit Greedy BFS demo\n");
         int choice_status = safe_input_int(&choice, "Enter choice: ", 0, 2);
         if (choice_status == INPUT_EXIT_SIGNAL || choice == 0)
         {
-            printf("\nExiting A* demo.....\n");
+            printf("\nExiting Greedy Best-First Search demo.....\n");
             free(h);
             free_weightedGraph(graph);
             return;

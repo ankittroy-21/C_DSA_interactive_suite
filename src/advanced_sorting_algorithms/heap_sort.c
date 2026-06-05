@@ -1,7 +1,9 @@
 #include "advanced_sorting.h"
 #include "data_structures.h" // priority_queue API (pq_init, insert, extractTop, destroy_pq)
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
+#include <time.h>
 
 /*
  * Heap sort implemented on top of the existing priority_queue (binary heap).
@@ -78,7 +80,10 @@ void heap_sort_demo(void)
             }
         }
 
+        clock_t start_t = clock();
         heap_sort(arr, length_of_array);
+        clock_t end_t = clock();
+        double total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
         printf("\nThe array sorted by heap sort is:- ");
         for (int i = 0; i < length_of_array; i++)
@@ -87,5 +92,7 @@ void heap_sort_demo(void)
             if (i < length_of_array - 1)
                 printf(",");
         }
+        printf("\nTotal CPU time taken:- %f seconds", total_t);
+        add_to_history("Heap Sort", length_of_array, total_t);
     }
 }

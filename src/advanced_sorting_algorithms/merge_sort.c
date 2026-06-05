@@ -1,7 +1,9 @@
 #include "advanced_sorting.h"
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 static void merge(int arr[], int left, int mid, int right)
 {
@@ -111,7 +113,10 @@ void merge_sort_demo(void)
             }
         }
 
+        clock_t start_t = clock();
         merge_sort(arr, length_of_array);
+        clock_t end_t = clock();
+        double total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
         printf("\nThe array sorted by merge sort is:- ");
         for (int i = 0; i < length_of_array; i++)
@@ -120,5 +125,7 @@ void merge_sort_demo(void)
             if (i < length_of_array - 1)
                 printf(",");
         }
+        printf("\nTotal CPU time taken:- %f seconds", total_t);
+        add_to_history("Merge Sort", length_of_array, total_t);
     }
 }

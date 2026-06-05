@@ -1,7 +1,9 @@
 #include "data_structures.h"
 #include "safe_input.h"
+#include "history_logger.h"
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
 void insertion_sort(int arr[], int length_of_array);
 
@@ -76,6 +78,7 @@ void insertion_sort(int arr[], int length_of_array)
         printf("after iteration no %d - ", i);
         print_array(arr, length_of_array);
         printf("\n");
+        sleep(1);
     }
 
     end_t = clock();
@@ -84,4 +87,5 @@ void insertion_sort(int arr[], int length_of_array)
     printf("\nfinal array sorted by insertion sort - ");
     print_array(arr, length_of_array);
     printf("\nTotal CPU time taken:- %f seconds", total_t);
+    add_to_history("Insertion Sort", length_of_array, total_t);
 }
