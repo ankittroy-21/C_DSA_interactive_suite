@@ -84,7 +84,6 @@ void shell_sort(int arr[], int length_of_array)
         printf("after gap of %d - ", gap);
         print_array(arr, length_of_array);
         printf("\n");
-        sleep(1);
     }
 
     end_t = clock();

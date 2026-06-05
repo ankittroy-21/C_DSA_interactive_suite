@@ -78,7 +78,6 @@ void insertion_sort(int arr[], int length_of_array)
         printf("after iteration no %d - ", i);
         print_array(arr, length_of_array);
         printf("\n");
-        sleep(1);
     }
 
     end_t = clock();

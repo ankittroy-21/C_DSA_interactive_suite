@@ -83,7 +83,6 @@ void bubble_sort_optimized(int arr[], int length_of_array)
         printf("after iteration no %d - ", i + 1);
         print_array(arr, length_of_array);
         printf("\n");
-        sleep(1);
     }
 
     end_t = clock(); // time recorded at the end of the algorithm
