@@ -204,3 +204,75 @@ weightedGraph* load_weightedGraph_with_heuristic_from_csv(const char* path, int*
     printf("\nLoaded graph from '%s' (%d vertices, %d edges) with heuristics.\n", path, V, E);
     return graph;
 }
+
+Graph* load_graph_from_csv(const char* path)
+{
+    FILE* fp = fopen(path, "r");
+
+    if (!fp)
+    {
+        printf("\nCould not open file '%s'. Please check the path and try again.\n", path);
+        return NULL;
+    }
+
+    int V;
+    int E;
+
+    if (fscanf(fp, "%d %d", &V, &E) != 2)
+    {
+        printf("\nInvalid file: the first line must be '<vertices> <edges>'.\n");
+        fclose(fp);
+        return NULL;
+    }
+
+    if (V < 1 || V > CSV_MAX_VERTICES)
+    {
+        printf("\nInvalid vertex count %d (must be between 1 and %d).\n", V, CSV_MAX_VERTICES);
+        fclose(fp);
+        return NULL;
+    }
+
+    if (E < 0 || E > CSV_MAX_EDGES)
+    {
+        printf("\nInvalid edge count %d (must be between 0 and %d).\n", E, CSV_MAX_EDGES);
+        fclose(fp);
+        return NULL;
+    }
+
+    Graph* graph = create_graph(V);
+
+    if (!graph)
+    {
+        printf("\nMemory allocation failed while building the graph.\n");
+        fclose(fp);
+        return NULL;
+    }
+
+    for (int i = 0; i < E; i++)
+    {
+        int src;
+        int dest;
+
+        if (fscanf(fp, "%d,%d", &src, &dest) != 2)
+        {
+            printf("\nInvalid file: edge %d is not in the form '<src>,<dest>'.\n", i + 1);
+            free_graph(graph);
+            fclose(fp);
+            return NULL;
+        }
+
+        if (src < 0 || src >= V || dest < 0 || dest >= V)
+        {
+            printf("\nInvalid edge %d: vertices must be between 0 and %d.\n", i + 1, V - 1);
+            free_graph(graph);
+            fclose(fp);
+            return NULL;
+        }
+
+        add_edge_undirected(graph, src, dest);
+    }
+
+    fclose(fp);
+    printf("\nLoaded graph from '%s' (%d vertices, %d edges).\n", path, V, E);
+    return graph;
+}

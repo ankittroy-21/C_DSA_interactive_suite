@@ -30,4 +30,17 @@ weightedGraph* load_weightedGraph_from_csv(const char* path);
 // NULL, and prints a descriptive message.
 weightedGraph* load_weightedGraph_with_heuristic_from_csv(const char* path, int** out_h);
 
+// Loads an unweighted, undirected graph from a CSV file for the traversals
+// (BFS / DFS).
+//
+// Expected format:
+//   line 1 : <number_of_vertices> <number_of_edges>
+//   next E : <src>,<dest>                    (one undirected edge per line)
+//
+// Each edge is added with add_edge_undirected, so both endpoints reference each
+// other. Returns a newly allocated Graph on success (caller frees it with
+// free_graph), or NULL if the file cannot be opened or its contents are
+// malformed/out of range. A descriptive message is printed on failure.
+Graph* load_graph_from_csv(const char* path);
+
 #endif

@@ -164,7 +164,7 @@ $(TEST_DIR)/test_deque$(EXE): $(OBJ_DIR)/src/data_structures/deque.o $(OBJ_DIR)/
 test_astar: $(TEST_DIR)/test_astar$(EXE)
 	$(TEST_DIR)/test_astar$(EXE)
 
-$(TEST_DIR)/test_astar$(EXE): $(OBJ_DIR)/src/graph_traversals/astar.o $(OBJ_DIR)/src/graph_traversals/dijkstra.o $(OBJ_DIR)/src/utils/graph_io.o $(OBJ_DIR)/src/utils/safe_input_int.o tests/test_astar.c
+$(TEST_DIR)/test_astar$(EXE): $(OBJ_DIR)/src/graph_traversals/astar.o $(OBJ_DIR)/src/graph_traversals/dijkstra.o $(OBJ_DIR)/src/utils/graph_io.o $(OBJ_DIR)/src/graph_traversals/bfs.o $(OBJ_DIR)/src/data_structures/circular_queue.o $(OBJ_DIR)/src/data_structures/sll.o $(OBJ_DIR)/src/utils/safe_input_int.o tests/test_astar.c
 	@mkdir -p $(TEST_DIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
@@ -185,7 +185,7 @@ $(TEST_DIR)/test_trie$(EXE): $(OBJ_DIR)/src/data_structures/trie.o $(OBJ_DIR)/sr
 test_greedy_bfs: $(TEST_DIR)/test_greedy_bfs$(EXE)
 	$(TEST_DIR)/test_greedy_bfs$(EXE)
 
-$(TEST_DIR)/test_greedy_bfs$(EXE): $(OBJ_DIR)/src/graph_traversals/greedy_best_first_search.o $(OBJ_DIR)/src/graph_traversals/dijkstra.o $(OBJ_DIR)/src/utils/graph_io.o $(OBJ_DIR)/src/utils/safe_input_int.o tests/test_greedy_best_first_search.c
+$(TEST_DIR)/test_greedy_bfs$(EXE): $(OBJ_DIR)/src/graph_traversals/greedy_best_first_search.o $(OBJ_DIR)/src/graph_traversals/dijkstra.o $(OBJ_DIR)/src/utils/graph_io.o $(OBJ_DIR)/src/graph_traversals/bfs.o $(OBJ_DIR)/src/data_structures/circular_queue.o $(OBJ_DIR)/src/data_structures/sll.o $(OBJ_DIR)/src/utils/safe_input_int.o tests/test_greedy_best_first_search.c
 	@mkdir -p $(TEST_DIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
