@@ -2,16 +2,48 @@
 #include "safe_input.h"
 #include <stdio.h>
 
-/*
- * trees_demo()
- *
- * Top-level demo dispatcher for the trees module.
- * Called from main menu option 8.
- * Sub-menus for B-Tree and B+ Tree will be added here
- * once their implementations are complete.
- */
 void trees_demo(void)
 {
-    printf("\nTrees module - B-Tree and B+ Tree implementations coming soon.\n");
-    printf("Returning to main menu...\n");
+    int tree_status, tree_choice;
+
+    while (1)
+    {
+        tree_status = safe_input_int(
+            &tree_choice,
+            "\nenter 1 for Binary Search Tree demo"
+            "\nenter 2 for AVL Tree demo"
+            "\nenter 3 for Threaded Binary Tree demo"
+            "\nenter 4 for Trie demo"
+            "\nenter choice : ",
+            1, 4
+        );
+
+        if (tree_status == INPUT_EXIT_SIGNAL)
+        {
+            printf("\nExiting trees_demo....\n");
+            return;
+        }
+
+        if (tree_status == 0)
+            continue;
+
+        switch (tree_choice)
+        {
+            case 1:
+                binary_search_tree_Demo();
+                break;
+
+            case 2:
+                avl_demo();
+                break;
+
+            case 3:
+                TBT_demo();
+                break;
+
+            case 4:
+                trie_demo();
+                break;
+        }
+    }
 }
