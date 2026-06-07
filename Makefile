@@ -36,10 +36,13 @@ ifeq ($(OS),Windows_NT)
 	RM = cmd /c del
 	RM_DIR = cmd /c rmdir /s /q
 	EXE = .exe
+	MKDIR_P = cmd /c if not exist "$(subst /,\,$(1))" mkdir "$(subst /,\,$(1))"
 else
 	RM = rm -f
 	RM_DIR = rm -rf
 	EXE =
+	MKDIR_P = mkdir -p "$(1)"
+
 endif
 
 TARGET = dsa
@@ -53,12 +56,6 @@ run: $(TARGET)
 	./$(TARGET)$(EXE)
 
 
-ifeq ($(OS),Windows_NT)
-MKDIR_P = cmd /c if not exist "$(subst /,\,$(1))" mkdir "$(subst /,\,$(1))"
-else
-MKDIR_P = mkdir -p "$(1)"
-endif
-
 $(OBJ_DIR)/%.o: %.c
 	@$(call MKDIR_P,$(dir $@))
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -67,10 +64,15 @@ fmt:
 	find . \( -name "*.c" -o -name "*.h" \) -not -path "*/build/*" -not -path "*/object_files/*" -not -path "*/test_binaries/*" | xargs clang-format -i
 
 clean:
-	$(RM) $(TARGET)$(EXE)
-	$(RM) $(foreach bin,$(TEST_BINS),$(TEST_DIR)/$(bin)$(EXE))
+ifeq ($(OS),Windows_NT)
 	$(RM_DIR) $(OBJ_DIR)
 	$(RM_DIR) $(TEST_DIR)
+	$(RM) $(TARGET)$(EXE)
+else
+	$(RM_DIR) $(OBJ_DIR)
+	$(RM_DIR) $(TEST_DIR)
+	$(RM) $(TARGET)$(EXE)
+endif
 
 valgrind:
 	for t in $(TEST_BINS); do \
@@ -82,6 +84,17 @@ valgrind:
 # =========================
 # Test Section
 # =========================
+
+TEST_BINS = test_circ_queue test_bst test_search test_hash_func \
+            test_sll test_dll test_array test_stack test_tbt \
+            test_priority_queue test_scll test_simple_queue \
+            test_deque test_astar test_avl \
+            test_greedy_bfs test_sorting_n2 test_advanced_sorting \
+            test_history_logger test_shell_sort test_trie
+
+		
+test: $(TEST_BINS)
+
 
 test_tbt: $(TEST_DIR)/test_tbt$(EXE)
 	$(TEST_DIR)/test_tbt$(EXE)
@@ -230,13 +243,5 @@ $(TEST_DIR)/test_advanced_sorting$(EXE): $(OBJ_DIR)/src/advanced_sorting_algorit
 	@$(call MKDIR_P,$(TEST_DIR))
 	$(CC) $(CFLAGS) $^ -o $@
 
-TEST_BINS = test_circ_queue test_bst test_search test_hash_func \
-            test_sll test_dll test_array test_stack test_tbt \
-            test_priority_queue test_scll test_simple_queue \
-            test_deque test_astar test_avl \
-            test_greedy_bfs test_sorting_n2 test_advanced_sorting \
-            test_history_logger test_shell_sort test_trie
 
-test: $(TEST_BINS)
-
-.PHONY: all fmt clean valgrind test run $(TEST_BINS)
+.PHONY: run fmt clean valgrind
