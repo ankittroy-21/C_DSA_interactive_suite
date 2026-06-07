@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <error_correction_algorithms.h>
 #include "safe_input.h"
+#include <error_correction_algorithms.h>
+#include <stdio.h>
 
 /*New functions come here*/
 
@@ -10,21 +10,26 @@ void error_correction_algorithms_demo(void)
     {
         int ECA_choice;
         /*Change the prompt and the range accordingly when new functions get added*/
-        int ECA_status = safe_input_int(&ECA_choice, "\nAlgorithms yet to be added. Enter -1 to exit: ",0 , 0);
+        int ECA_status =
+            safe_input_int(&ECA_choice, "\nEnter 1 for checksum. Enter -1 to exit: ", 1, 1);
 
-        if(ECA_status == INPUT_EXIT_SIGNAL)
+        if (ECA_status == INPUT_EXIT_SIGNAL)
         {
             printf("Exiting Error Correction Algorithm Demo....");
             return;
         }
 
-        if(ECA_status == 0)
+        if (ECA_status == 0)
             continue;
-        
-        switch(ECA_choice)
+
+        switch (ECA_choice)
         {
 
-            /*Newly implemented functions will be called here*/
+                /*Newly implemented functions will be called here*/
+
+            case 1:
+                checksum_demo();
+                break;
 
             default:
                 printf("Wrong choice entered");
