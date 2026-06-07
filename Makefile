@@ -49,6 +49,10 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)$(EXE)
 
+run: $(TARGET)
+	./$(TARGET)$(EXE)
+
+
 ifeq ($(OS),Windows_NT)
 MKDIR_P = cmd /c if not exist "$(subst /,\,$(1))" mkdir "$(subst /,\,$(1))"
 else
@@ -235,4 +239,4 @@ TEST_BINS = test_circ_queue test_bst test_search test_hash_func \
 
 test: $(TEST_BINS)
 
-.PHONY: all fmt clean valgrind test $(TARGET) $(TEST_BINS)
+.PHONY: all fmt clean valgrind test run $(TEST_BINS)
