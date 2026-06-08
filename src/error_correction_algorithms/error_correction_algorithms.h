@@ -12,6 +12,11 @@ void checksum_demo(void);
 void checksum_receiver_demo(void);
 void crc_demo(void);
 void lrc_demo(void);
+int generateEvenParity(const char *data);
+int generateOddParity(const char *data);
+int verifyEvenParity(const char *receivedData);
+int verifyOddParity(const char *receivedData);
+void parity_bit_demo(void);
 
 // shared checksum helpers (defined in checksum.c, reused by the receiver side)
 void checksum_print_binary(int value, int bits);
