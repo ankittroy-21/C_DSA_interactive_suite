@@ -77,7 +77,7 @@ static void visualize_weighted_graph(void)
             break;
         }
     }
-    else
+    else if(input_method == 1)
     {
         while (1)
         {
