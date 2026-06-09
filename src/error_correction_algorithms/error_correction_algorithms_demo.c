@@ -10,14 +10,15 @@ void error_correction_algorithms_demo(void)
     {
         int ECA_choice;
         /*Change the prompt and the range accordingly when new functions get added*/
-        int ECA_status = safe_input_int(
-            &ECA_choice,
-            "\nEnter 1 for checksum (sender)"
-            "\nEnter 2 for checksum (receiver)"
-            "\nEnter 3 for CRC"
-            "\nEnter 4 for LRC"
-            "\nEnter 5 for VRC"
-            "\nEnter -1 to exit: ", 1, 5);
+        int ECA_status = safe_input_int(&ECA_choice,
+                                        "\nEnter 1 for checksum (sender)"
+                                        "\nEnter 2 for checksum (receiver)"
+                                        "\nEnter 3 for CRC"
+                                        "\nEnter 4 for LRC"
+                                        "\nEnter 5 for VRC"
+                                        "\nEnter 6 for Hamming Code"
+                                        "\nEnter -1 to exit: ",
+                                        1, 6);
 
         if (ECA_status == INPUT_EXIT_SIGNAL)
         {
@@ -40,7 +41,7 @@ void error_correction_algorithms_demo(void)
             case 2:
                 checksum_receiver_demo();
                 break;
-            
+
             case 3:
                 crc_demo();
                 break;
@@ -51,6 +52,10 @@ void error_correction_algorithms_demo(void)
 
             case 5:
                 vrc_demo();
+                break;
+
+            case 6:
+                hamming_demo();
                 break;
 
             default:
