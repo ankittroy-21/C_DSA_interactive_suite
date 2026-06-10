@@ -1,17 +1,30 @@
 #include "error_correction_algorithms.h"
+#include "history_logger.h"
 #include "safe_input.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
-// converts a k-bit binary string into its integer value. the caller guarantees the
-// string contains only '0'/'1' and is exactly k characters long.
-static int checksum_bits_to_int(const char* bits, int k)
+// converts a k-bit binary string into its integer value with timing and logging
+int checksum_bits_to_int(const char* bits, int k)
 {
+    clock_t start_t, end_t;
+    double total_t;
+    
+    start_t = clock();
+    
     int value = 0;
     for (int i = 0; i < k; i++)
     {
         value = (value << 1) | (bits[i] - '0');
     }
+    
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+    
+    // Log to CSV - use "Checksum Receiver" as algorithm name
+    add_to_history("Checksum Receiver", k, total_t);
+    
     return value;
 }
 

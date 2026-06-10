@@ -1,7 +1,9 @@
 #include "error_correction_algorithms.h"
+#include "history_logger.h"
 #include "safe_input.h"
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 // prints the low `bits` bits of value, most-significant bit first. shared helper
 // used for displaying k-bit words/checksums in the sender and receiver demos.
@@ -109,6 +111,26 @@ int checksum_block_sum(const char* data, int len, int k)
     return sum;
 }
 
+// Wrapper function with timing and logging for checksum_block_sum
+int checksum_block_sum_with_logging(const char* data, int len, int k)
+{
+    clock_t start_t, end_t;
+    double total_t;
+    
+    start_t = clock();
+    
+    // Call the original function
+    int result = checksum_block_sum(data, len, k);
+    
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+    
+    // Log to CSV - use "Checksum Sender" as algorithm name
+    add_to_history("Checksum Sender", len, total_t);
+    
+    return result;
+}
+
 // checksum (sender side): the data is split into k-bit blocks and summed using
 // one's-complement (end-around carry) addition; the checksum is the one's complement
 // of that running sum. this is the value the sender appends to the data before
@@ -151,7 +173,7 @@ void checksum_demo(void)
         int len = (int)strlen(data);
         int mask = (1 << k) - 1; // keeps only the low k bits
 
-        int sum = checksum_block_sum(data, len, k);
+        int sum = checksum_block_sum_with_logging(data, len, k);
         int checksum = (~sum) & mask; // one's complement of the final sum, kept to k bits
 
         printf("\nfinal sum       = ");
