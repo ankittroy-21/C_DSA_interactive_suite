@@ -132,13 +132,22 @@ void postfix_evaluation_Demo(void)
             sleep_seconds(1);
         }
 
+        if (isEmpty(operands))
+        {
+            printf("\n[Error] Invalid or empty expression provided.\n");
+            destroyStack(operands);
+            continue;
+        }
+
         int final_result = pop(operands);
 
         if (!isEmpty(operands))
         {
+            printf("\n[Error] Malformed expression: Too many operands.\n");
             destroyStack(operands);
-            return;
+            continue;
         }
+
         destroyStack(operands);
         printf("\n===================================\n");
         printf("Final Evaluated Result : %d\n", final_result);
