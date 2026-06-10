@@ -1,11 +1,16 @@
 #include "data_structures.h"
 #include "graph_io.h"
 #include "graph_traversals.h"
+#include "history_logger.h"
 #include "safe_input.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
+// note: the time measured by clock() includes the traversal computation and the printing of each
+// visited node. the CPU time is for demonstration only and must not be treated as a measure of the
+// algorithm's efficiency.
 void bfs(Graph* graph, int start)
 {
     int size = graph->V;
@@ -27,6 +32,11 @@ void bfs(Graph* graph, int start)
         printf("\nerror initializing queue. returning....");
         return;
     }
+
+    clock_t start_t, end_t;
+    double total_t;
+
+    start_t = clock();
 
     visited[start] = 1;
     enqueue(&nodes, start);
@@ -53,7 +63,12 @@ void bfs(Graph* graph, int start)
         }
     }
 
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+
     printf("end\n");
+    printf("\ntotal CPU time taken for BFS traversal:- %f seconds\n", total_t);
+    add_to_history("BFS", size, total_t);
     destroy_circ_queue(&nodes);
 }
 
