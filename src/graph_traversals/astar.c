@@ -14,14 +14,10 @@ int astar_solve(weightedGraph* graph, int start, int dest, int h[], int parent[]
     int* visited = calloc(size, sizeof(int));
     int* dist = malloc(size * sizeof(int));
     int* fScore = malloc(size * sizeof(int));
+    int result = INT_MAX;
 
     if (!visited || !dist || !fScore)
-    {
-        free(visited);
-        free(dist);
-        free(fScore);
-        return -1;
-    }
+        goto cleanup;
 
     for (int i = 0; i < size; i++)
     {
@@ -39,11 +35,12 @@ int astar_solve(weightedGraph* graph, int start, int dest, int h[], int parent[]
     PQ_graph pq;
     init_pq_graph(&pq, 10);
 
+    if (!pq.heap)
+        goto cleanup;
+
     dist[start] = 0;
     fScore[start] = h[start];
     insert_pq_graph(&pq, start, fScore[start]);
-
-    int result = INT_MAX;
 
     PQ_graph_node popped;
     while (extractTop_pq_graph(&pq, &popped))
@@ -100,6 +97,9 @@ int astar_solve(weightedGraph* graph, int start, int dest, int h[], int parent[]
     }
 
     free_pq_graph(&pq);
+
+cleanup:
+    free(visited);
     free(dist);
     free(fScore);
     return result;
