@@ -1,11 +1,19 @@
 #include "dsu.h"
 #include "graph_io.h"
 #include "graph_traversals.h"
+#include "history_logger.h"
 #include "safe_input.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
+/**
+ * KruskalEdge - Structure to represent a weighted edge for Kruskal's algorithm.
+ * @src: Source vertex.
+ * @dest: Destination vertex.
+ * @weight: Weight of the edge.
+ */
 typedef struct KruskalEdge
 {
     int src;
@@ -13,11 +21,24 @@ typedef struct KruskalEdge
     int weight;
 } KruskalEdge;
 
+/**
+ * compare_edges - Comparator function for qsort to sort edges by weight.
+ * @a: Pointer to the first KruskalEdge.
+ * @b: Pointer to the second KruskalEdge.
+ *
+ * Returns a negative value if a < b, positive if a > b, and zero if equal.
+ */
 static int compare_edges(const void* a, const void* b)
 {
     return ((KruskalEdge*)a)->weight - ((KruskalEdge*)b)->weight;
 }
 
+/**
+ * kruskal_mst - Implements Kruskal's algorithm to find the Minimum Spanning Tree (MST).
+ * @graph: The weighted undirected graph.
+ *
+ * Returns the total weight of the MST, or 0 on error/empty graph.
+ */
 int kruskal_mst(weightedGraph* graph)
 {
     if (graph == NULL || graph->V == 0)
@@ -28,7 +49,7 @@ int kruskal_mst(weightedGraph* graph)
     int V = graph->V;
     int E = 0;
 
-    // Count edges
+    // Count edges (assuming undirected, each edge is represented twice in adjacency list)
     for (int i = 0; i < V; i++)
     {
         Edge* curr = graph->array[i];
@@ -65,6 +86,11 @@ int kruskal_mst(weightedGraph* graph)
         }
     }
 
+    clock_t start_t, end_t;
+    double total_t;
+
+    start_t = clock();
+
     // Sort edges by weight
     qsort(edges, E, sizeof(KruskalEdge), compare_edges);
 
@@ -96,12 +122,18 @@ int kruskal_mst(weightedGraph* graph)
         }
     }
 
+    end_t = clock();
+    total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
+
     if (edges_count < V - 1)
     {
         printf("\nWarning: The graph is disconnected. The result is a Minimum Spanning Forest.\n");
     }
 
     printf("\nTotal Weight of MST: %d\n", mst_weight);
+    printf("Total CPU time taken: %f seconds\n", total_t);
+
+    add_to_history("Kruskal's MST", V, total_t);
 
     free_dsu(dsu);
     free(edges);
@@ -109,6 +141,9 @@ int kruskal_mst(weightedGraph* graph)
     return mst_weight;
 }
 
+/**
+ * kruskal_demo - Interactive demo for Kruskal's algorithm.
+ */
 void kruskal_demo(void)
 {
     int V, E;
@@ -179,7 +214,8 @@ void kruskal_demo(void)
     {
         while (1)
         {
-            int status = safe_input_int(&V, "\nEnter number of vertices (1-100), enter '-1' to exit: ", 1, 100);
+            int status = safe_input_int(
+                &V, "\nEnter number of vertices (1-100), enter '-1' to exit: ", 1, 100);
             if (status == INPUT_EXIT_SIGNAL)
             {
                 printf("\nExiting Kruskal's demo.....\n");
@@ -194,7 +230,8 @@ void kruskal_demo(void)
 
         while (1)
         {
-            int status = safe_input_int(&E, "\nEnter number of edges (0-1000), enter '-1' to exit: ", 0, 1000);
+            int status = safe_input_int(
+                &E, "\nEnter number of edges (0-1000), enter '-1' to exit: ", 0, 1000);
             if (status == INPUT_EXIT_SIGNAL)
             {
                 printf("\nExiting Kruskal's demo.....\n");
