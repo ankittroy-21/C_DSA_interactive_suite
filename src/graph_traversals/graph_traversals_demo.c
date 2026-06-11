@@ -13,8 +13,8 @@ void graph_traversals_demo(void)
 
                            "5 for greedy-bfs, 6 for bellman ford, 7 for topological-sort, "
 
-                           "8 for visualize-graph : ",
-                           1, 8);
+                           "8 for visualize-graph, 9 for prim's mst : ",
+                           1, 9);
 
         if (graph_traversal_status == INPUT_EXIT_SIGNAL)
         {
@@ -52,6 +52,9 @@ void graph_traversals_demo(void)
                 break;
             case 8:
                 visualize_graph_demo();
+                break;
+            case 9:
+                prim_demo();
                 break;
         }
     }

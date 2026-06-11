@@ -258,14 +258,14 @@ TEST_BINS = test_circ_queue test_bst test_search test_hash_func \
             test_deque test_astar test_avl \
             test_greedy_bfs test_sorting_n2 test_advanced_sorting \
             test_history_logger test_shell_sort test_trie test_btree \
-            test_bplus_tree test_parity_bit test_prism
+            test_bplus_tree test_parity_bit test_prim
 
 test: $(TEST_BINS)
 
-test_prism: $(TEST_DIR)/test_prism$(EXE)
-	$(TEST_DIR)/test_prism$(EXE)
+test_prim: $(TEST_DIR)/test_prim$(EXE)
+	$(TEST_DIR)/test_prim$(EXE)
 
-$(TEST_DIR)/test_prism$(EXE): $(filter-out $(OBJ_DIR)/src/data_structures/main.o, $(OBJS)) tests/test_prism.c
+$(TEST_DIR)/test_prim$(EXE): $(filter-out $(OBJ_DIR)/src/data_structures/main.o, $(OBJS)) tests/test_prim.c
 	@$(call MKDIR_P,$(TEST_DIR))
 	$(CC) $(CFLAGS) $^ -o $@
 
